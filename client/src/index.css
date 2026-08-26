@@ -1,0 +1,146 @@
+﻿@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 210 30% 97%;
+    --foreground: 213 35% 16%;
+    --border: 210 24% 88%;
+    --card: 0 0% 100%;
+    --card-foreground: 213 35% 16%;
+    --card-border: 210 24% 88%;
+    --sidebar: 213 37% 18%;
+    --sidebar-foreground: 210 24% 90%;
+    --sidebar-border: 213 28% 28%;
+    --sidebar-primary: 174 44% 47%;
+    --sidebar-primary-foreground: 213 37% 14%;
+    --sidebar-accent: 213 31% 25%;
+    --sidebar-accent-foreground: 210 24% 96%;
+    --sidebar-ring: 174 44% 47%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 213 35% 16%;
+    --primary: 174 44% 38%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 27% 92%;
+    --secondary-foreground: 213 35% 21%;
+    --muted: 210 25% 94%;
+    --muted-foreground: 211 18% 46%;
+    --accent: 40 78% 58%;
+    --accent-foreground: 213 35% 16%;
+    --destructive: 3 68% 56%;
+    --destructive-foreground: 0 0% 100%;
+    --input: 210 24% 83%;
+    --ring: 174 44% 38%;
+    --radius: 0.75rem;
+
+    --app-font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --app-font-serif: "Space Grotesk", sans-serif;
+    --app-font-mono: "DM Mono", ui-monospace, monospace;
+  }
+
+  .dark {
+    --background: 213 36% 10%;
+    --foreground: 210 24% 92%;
+    --border: 213 28% 24%;
+    --card: 213 33% 14%;
+    --card-foreground: 210 24% 92%;
+    --card-border: 213 28% 24%;
+    --sidebar: 213 40% 8%;
+    --sidebar-foreground: 210 24% 88%;
+    --sidebar-border: 213 28% 19%;
+    --sidebar-primary: 174 44% 47%;
+    --sidebar-primary-foreground: 213 40% 8%;
+    --sidebar-accent: 213 31% 18%;
+    --sidebar-accent-foreground: 210 24% 96%;
+    --sidebar-ring: 174 44% 47%;
+    --popover: 213 33% 14%;
+    --popover-foreground: 210 24% 92%;
+    --primary: 174 44% 47%;
+    --primary-foreground: 213 40% 8%;
+    --secondary: 213 29% 21%;
+    --secondary-foreground: 210 24% 92%;
+    --muted: 213 29% 18%;
+    --muted-foreground: 211 15% 65%;
+    --accent: 40 78% 58%;
+    --accent-foreground: 213 40% 8%;
+    --destructive: 3 68% 56%;
+    --destructive-foreground: 0 0% 100%;
+    --input: 213 28% 31%;
+    --ring: 174 44% 47%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+}
+
+.panel {
+  @apply rounded-2xl border border-border bg-card/85 shadow-sm backdrop-blur-md transition-all duration-200;
+}
+
+.eyebrow {
+  @apply font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground;
+}
+
+.field {
+  @apply flex flex-col gap-1.5 text-xs font-semibold text-foreground;
+}
+
+.field input, .field select, .field textarea {
+  @apply w-full rounded-xl border border-border bg-background px-3.5 py-2.5 text-xs font-normal text-foreground outline-none transition-all placeholder:text-muted-foreground/70 focus:border-primary focus:ring-1 focus:ring-primary;
+}
+
+.field em {
+  @apply font-mono text-[10px] not-italic font-normal text-muted-foreground;
+}
+
+.airms-rise {
+  animation: airmsRise 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.airms-grid {
+  background-size: 24px 24px;
+  background-image: radial-gradient(hsl(var(--border)) 1px, transparent 1px);
+}
+
+.dot-critical {
+  @apply bg-[hsl(var(--destructive))];
+}
+.dot-high {
+  @apply bg-[hsl(var(--accent))];
+}
+.dot-medium {
+  @apply bg-amber-500;
+}
+.dot-low {
+  @apply bg-emerald-500;
+}
+
+.bar-teal {
+  @apply bg-[hsl(var(--primary))];
+}
+.bar-amber {
+  @apply bg-[hsl(var(--accent))];
+}
+.bar-blue {
+  @apply bg-sky-500;
+}
+.bar-green {
+  @apply bg-emerald-500;
+}
+
+@keyframes airmsRise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
