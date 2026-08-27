@@ -1,10 +1,9 @@
 ﻿import type { Express, Request, Response } from "express";
-import { storage } from "./storage.js";
-import { calculateRiskScore, askAssistant } from "./ai.js";
-import { AnalyzeRiskInput } from "./types.js";
+import { storage } from "./storage";
+import { calculateRiskScore, askAssistant } from "./ai";
+import { AnalyzeRiskInput } from "./types";
 
 export function registerRoutes(app: Express) {
-  // 1. Dashboard summary
   app.get("/api/dashboard/summary", async (_req: Request, res: Response) => {
     try {
       const summary = await storage.getDashboardSummary();
@@ -14,7 +13,6 @@ export function registerRoutes(app: Express) {
     }
   });
 
-  // 2. Dashboard trends
   app.get("/api/dashboard/trends", async (_req: Request, res: Response) => {
     try {
       const trends = await storage.getDashboardTrends();
@@ -24,7 +22,6 @@ export function registerRoutes(app: Express) {
     }
   });
 
-  // 3. Risks list (with filters)
   app.get("/api/risks", async (req: Request, res: Response) => {
     try {
       const { search, severity, status, category } = req.query as Record<string, string>;
@@ -35,7 +32,6 @@ export function registerRoutes(app: Express) {
     }
   });
 
-  // 4. Risk by ID
   app.get("/api/risks/:id", async (req: Request, res: Response) => {
     try {
       const id = parseInt(req.params.id, 10);
@@ -49,7 +45,6 @@ export function registerRoutes(app: Express) {
     }
   });
 
-  // 5. Update risk (owner, status, etc.)
   app.patch("/api/risks/:id", async (req: Request, res: Response) => {
     try {
       const id = parseInt(req.params.id, 10);
@@ -63,7 +58,6 @@ export function registerRoutes(app: Express) {
     }
   });
 
-  // 6. Create risk
   app.post("/api/risks", async (req: Request, res: Response) => {
     try {
       const risk = await storage.createRisk(req.body);
@@ -73,7 +67,6 @@ export function registerRoutes(app: Express) {
     }
   });
 
-  // 7. Detect & Analyze Risk
   app.post("/api/risks/analyze", async (req: Request, res: Response) => {
     try {
       const input: AnalyzeRiskInput = req.body;
@@ -109,7 +102,6 @@ export function registerRoutes(app: Express) {
     }
   });
 
-  // 8. Alerts list
   app.get("/api/alerts", async (_req: Request, res: Response) => {
     try {
       const alerts = await storage.getAlerts();
@@ -119,7 +111,6 @@ export function registerRoutes(app: Express) {
     }
   });
 
-  // 9. Mark alert as read
   app.patch("/api/alerts/:id/read", async (req: Request, res: Response) => {
     try {
       const id = parseInt(req.params.id, 10);
@@ -133,7 +124,6 @@ export function registerRoutes(app: Express) {
     }
   });
 
-  // 10. AI Copilot / Assistant
   app.post("/api/assistant/ask", async (req: Request, res: Response) => {
     try {
       const { question } = req.body;
