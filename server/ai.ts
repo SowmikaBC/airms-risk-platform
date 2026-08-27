@@ -1,7 +1,6 @@
-﻿import { AnalyzeRiskInput, Risk, Severity, Trend, AssistantResponse } from "./types.js";
-import { storage } from "./storage.js";
+﻿import { AnalyzeRiskInput, Risk, Severity, Trend, AssistantResponse } from "./types";
+import { storage } from "./storage";
 
-// Calibrate risk score based on probability, impact, incidents, telemetry
 export function calculateRiskScore(input: AnalyzeRiskInput): {
   score: number;
   severity: Severity;
@@ -12,10 +11,8 @@ export function calculateRiskScore(input: AnalyzeRiskInput): {
 } {
   const { probability, impact, incidents = 0, budgetUsage = 50, completion = 50, daysRemaining = 30 } = input;
   
-  // Base formula (1 to 25 -> scaled to 100)
   let rawScore = (probability * impact * 4);
   
-  // Telemetry adjustments
   if (incidents > 0) {
     rawScore += Math.min(incidents * 4, 15);
   }
@@ -78,12 +75,11 @@ export async function askAssistant(question: string): Promise<AssistantResponse>
   const summary = await storage.getDashboardSummary();
   const alerts = await storage.getAlerts();
 
-  // If Gemini API Key is available, use Google GenAI
-  const apiKey = process.env.GEMINI_API_KEY || process.env.OPENAI_API_KEY;
   if (process.env.GEMINI_API_KEY) {
     try {
-      const { GoogleGenAI } = await import("@google/genai");
-      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+      const { GoogleGenerativeAI } = await import("@google/generative-ai");
+      const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
       const prompt = `You are AIRMS Copilot, the AI risk intelligence officer.
 Context Data:
 - Total risks: ${summary.totalRisks} (${summary.criticalRisks} Critical, ${summary.highRisks} High, ${summary.mediumRisks} Medium, ${summary.lowRisks} Low)
@@ -103,12 +99,8 @@ Instructions:
 3. Suggest a clear, measured next move for risk control.
 4. Keep the tone concise, executive, and evidence-driven.`;
 
-      const response = await ai.models.generateContent({
-        model: "gemini-2.5-flash",
-        contents: prompt,
-      });
-
-      const text = response.text || "AIRMS Copilot could not generate an answer.";
+      const response = await model.generateContent(prompt);
+      const text = response.response.text() || "AIRMS Copilot could not generate an answer.";
       const sources = risks.slice(0, 3).map(r => `R-${r.id}: ${r.title} (${r.category})`);
       sources.push("AIRMS Telemetry Feed");
 
@@ -118,7 +110,6 @@ Instructions:
     }
   }
 
-  // Fallback heuristic intelligence engine
   const q = question.toLowerCase();
   let answer = "";
   const sources: string[] = [];
