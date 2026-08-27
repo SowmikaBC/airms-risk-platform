@@ -14,11 +14,11 @@ export interface Risk {
   title: string;
   description: string;
   category: RiskCategory;
-  probability: number; // 1 - 5
-  impact: number;      // 1 - 5
-  score: number;       // 0 - 100
+  probability: number;
+  impact: number;
+  score: number;
   severity: Severity;
-  confidence: number;  // 0 - 100 %
+  confidence: number;
   trend: Trend;
   status: RiskStatus;
   owner: string;
