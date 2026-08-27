@@ -1,4 +1,4 @@
-﻿import { Risk, RiskAlert, DashboardSummary, TrendPoint } from "./types.js";
+﻿import { Risk, RiskAlert, DashboardSummary, TrendPoint } from "./types";
 
 export interface IStorage {
   getRisks(params?: { search?: string; severity?: string; status?: string; category?: string }): Promise<Risk[]>;
@@ -232,7 +232,6 @@ export class MemStorage implements IStorage {
     };
     this.risks.set(id, newRisk);
 
-    // Create an alert if High or Critical
     if (newRisk.severity === "Critical" || newRisk.severity === "High") {
       const alertId = this.currentAlertId++;
       this.alerts.set(alertId, {
